@@ -8,7 +8,7 @@ dnl	to configure the system for the local environment.
 AC_INIT([tclx], [8.6])
 FULL_VERSION="8.6.3"
 
-TEA_INIT([3.9])
+TEA_INIT([3.13])
 
 AC_CONFIG_AUX_DIR(tclconfig)
 

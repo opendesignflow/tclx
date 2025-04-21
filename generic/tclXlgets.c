@@ -282,16 +282,16 @@ ReadListElement (Tcl_Interp  *interp,
 
 	    case '\\': {
 		char bsChar;
-
-                bsChar = Tcl_Backslash(p, &numChars);
+                // TO BE FIXED
+                /*bsChar = Tcl_Backslash(p, &numChars);
                 if (openBraces > 0) {
-                    p += (numChars - 1);  /* Advanced again at end of loop */
+                    p += (numChars - 1);  //Advanced again at end of loop 
                 } else {
                     Tcl_AppendToObj (elemObjPtr, cpStart, (p - cpStart));
                     Tcl_AppendToObj (elemObjPtr, &bsChar, 1);
                     p += (numChars - 1);
-                    cpStart = p + 1;  /* already stored character */
-                }
+                    cpStart = p + 1; // already stored character 
+                }*/
 		break;
 	    }
 
@@ -470,7 +470,7 @@ TclX_LgetsObjCmd (ClientData  clientData,
         int resultLen;
 
         if (Tcl_ObjSetVar2(interp, objv[2], NULL, dataObj,
-                           TCL_PARSE_PART1|TCL_LEAVE_ERR_MSG) == NULL) {
+                           TCL_LEAVE_ERR_MSG) == NULL) {
             goto errorExit;
         }
 
@@ -512,7 +512,7 @@ TclX_LgetsObjCmd (ClientData  clientData,
          * FIX: Need functions to save/restore error state.
          */
         if (Tcl_ObjSetVar2(interp, objv[2], NULL, dataObj,
-                           TCL_PARSE_PART1|TCL_LEAVE_ERR_MSG) != NULL) {
+                           TCL_LEAVE_ERR_MSG) != NULL) {
             Tcl_SetObjResult (interp, saveResult);  /* Restore old message */
         }
         Tcl_DecrRefCount (saveResult);

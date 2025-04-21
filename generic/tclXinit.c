@@ -77,7 +77,7 @@ Tclx_SafeInit (Tcl_Interp *interp)
 {
     if (
 #ifdef USE_TCL_STUBS
-	(Tcl_InitStubs(interp, "8.0", 0) == NULL)
+	(Tcl_InitStubs(interp, "8.0-10", 0) == NULL)
 #else
 	(Tcl_PkgRequire(interp, "Tcl", "8.0", 0) == NULL)
 #endif

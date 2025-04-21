@@ -278,14 +278,14 @@ FreeKeyedListData (keylIntObj_t *keylIntPtr)
 	Tcl_DecrRefCount(keylIntPtr->entries [idx].valuePtr);
     }
     if (keylIntPtr->entries != NULL)
-	ckfree ((VOID*) keylIntPtr->entries);
+	ckfree ((void*) keylIntPtr->entries);
 #ifndef NO_KEYLIST_HASH_TABLE
     if (keylIntPtr->hashTbl != NULL) {
 	Tcl_DeleteHashTable(keylIntPtr->hashTbl);
 	ckfree((char *) (keylIntPtr->hashTbl));
     }
 #endif
-    ckfree ((VOID*) keylIntPtr);
+    ckfree ((void*) keylIntPtr);
 }
 
 /*-----------------------------------------------------------------------------
@@ -312,7 +312,7 @@ EnsureKeyedListSpace (keylIntObj_t *keylIntPtr, int newNumEntries)
 		ckalloc (newSize * sizeof (keylEntry_t));
 	} else {
 	    keylIntPtr->entries = (keylEntry_t *)
-		ckrealloc ((VOID *) keylIntPtr->entries,
+		ckrealloc ((void *) keylIntPtr->entries,
 			   newSize * sizeof (keylEntry_t));
 	}
 	keylIntPtr->arraySize = newSize;
@@ -520,7 +520,7 @@ DupKeyedListInternalRep (Tcl_Obj *srcPtr, Tcl_Obj *copyPtr)
 #endif
     }
 
-    copyPtr->internalRep.otherValuePtr = (VOID *) copyIntPtr;
+    copyPtr->internalRep.otherValuePtr = (void *) copyIntPtr;
     copyPtr->typePtr = &keyedListType;
 
     KEYL_REP_ASSERT (copyIntPtr);
@@ -605,7 +605,7 @@ SetKeyedListFromAny (Tcl_Interp *interp, Tcl_Obj *objPtr)
 	(objPtr->typePtr->freeIntRepProc != NULL)) {
 	(*objPtr->typePtr->freeIntRepProc) (objPtr);
     }
-    objPtr->internalRep.otherValuePtr = (VOID *) keylIntPtr;
+    objPtr->internalRep.otherValuePtr = (void *) keylIntPtr;
     objPtr->typePtr = &keyedListType;
 
     KEYL_REP_ASSERT (keylIntPtr);
@@ -662,7 +662,7 @@ UpdateStringOfKeyedList (Tcl_Obj *keylPtr)
     Tcl_DecrRefCount(tmpListObj);
 
     if (listObjv != staticListObjv)
-	ckfree ((VOID*) listObjv);
+	ckfree ((void*) listObjv);
 }
 
 /*-----------------------------------------------------------------------------
@@ -679,7 +679,7 @@ TclX_NewKeyedListObj (void)
     Tcl_Obj *keylPtr = Tcl_NewObj ();
     keylIntObj_t *keylIntPtr = AllocKeyedListIntRep ();
 
-    keylPtr->internalRep.otherValuePtr = (VOID *) keylIntPtr;
+    keylPtr->internalRep.otherValuePtr = (void *) keylIntPtr;
     keylPtr->typePtr = &keyedListType;
     return keylPtr;
 }

@@ -63,11 +63,13 @@ static int	TclX_MinObjCmd (ClientData  clientData,
                             int         objc,
                             Tcl_Obj    *const objv[]);
 
+                            
+#if (TCL_MAJOR_VERSION < 9)
 static int	TclX_MinMaxFunc (ClientData   clientData,
                              Tcl_Interp  *interp,
 				             Tcl_Value *args,
                              Tcl_Value *resultPtr);
-
+#endif
 static int	TclX_RandomObjCmd (ClientData  clientData,
                                Tcl_Interp *interp,
 				               int         objc,
@@ -189,6 +191,7 @@ static int	TclX_MinObjCmd (ClientData  clientData,
  *
  *-----------------------------------------------------------------------------
  */
+  #if (TCL_MAJOR_VERSION < 9)
 static int	TclX_MinMaxFunc (ClientData   clientData,
                              Tcl_Interp  *interp,
 				             Tcl_Value *args,
@@ -246,6 +249,7 @@ static int	TclX_MinMaxFunc (ClientData   clientData,
     }
     return TCL_OK;
 }
+#endif
 
 /*-----------------------------------------------------------------------------
  * ReallyRandom --
@@ -335,32 +339,39 @@ static int	TclX_RandomObjCmd (ClientData  clientData,
 void
 TclX_MathInit (Tcl_Interp *interp)
 {
-    int major, minor;
-    Tcl_ValueType minMaxArgTypes[2];
 
-    minMaxArgTypes[0] = TCL_EITHER;
-    minMaxArgTypes[1] = TCL_EITHER;
-
-    Tcl_CreateObjCommand (interp, "max", TclX_MaxObjCmd,
-	    (ClientData) NULL, (Tcl_CmdDeleteProc*) NULL);
-
-    Tcl_CreateObjCommand (interp, "min", TclX_MinObjCmd,
-	    (ClientData) NULL, (Tcl_CmdDeleteProc*) NULL);
 
     Tcl_CreateObjCommand (interp, "random", TclX_RandomObjCmd,
 	    (ClientData) NULL, (Tcl_CmdDeleteProc*) NULL);
+    
+    // Removed old code first
+    #if (TCL_MAJOR_VERSION < 9)
+        /*
+        * Tcl 8.5 added core min/max expr functions
+        */
+        Tcl_GetVersion(&major, &minor, NULL, NULL);
+        if ((major == 8) && (minor <= 4)) {
 
-    /*
-     * Tcl 8.5 added core min/max expr functions
-     */
-    Tcl_GetVersion(&major, &minor, NULL, NULL);
-    if ((major == 8) && (minor <= 4)) {
-	Tcl_CreateMathFunc(interp, "max", 2, minMaxArgTypes,
-		TclX_MinMaxFunc, (ClientData) 1 /* IS_MAX */);
+            int major, minor;
+            Tcl_ValueType minMaxArgTypes[2];
 
-	Tcl_CreateMathFunc (interp, "min", 2, minMaxArgTypes,
-		TclX_MinMaxFunc, (ClientData) 0 /* IS_MIN */);
-    }
+            minMaxArgTypes[0] = TCL_EITHER;
+            minMaxArgTypes[1] = TCL_EITHER;
+
+            Tcl_CreateObjCommand (interp, "max", TclX_MaxObjCmd,
+                (ClientData) NULL, (Tcl_CmdDeleteProc*) NULL);
+
+            Tcl_CreateObjCommand (interp, "min", TclX_MinObjCmd,
+                (ClientData) NULL, (Tcl_CmdDeleteProc*) NULL);
+
+            Tcl_CreateMathFunc(interp, "max", 2, minMaxArgTypes,
+                TclX_MinMaxFunc, (ClientData) 1 /* IS_MAX */);
+
+            Tcl_CreateMathFunc (interp, "min", 2, minMaxArgTypes,
+                TclX_MinMaxFunc, (ClientData) 0 /* IS_MIN */);
+        }
+    #endif
+
 }
 
 
