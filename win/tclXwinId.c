@@ -18,6 +18,9 @@
 
 #include "tclExtdInt.h"
 
+// 25/05 Added as TCL_RESULT_SIZE is not defined anymore in tcl.h
+#define TCL_RESULT_SIZE		200
+
 /*
  * Prototypes of internal functions.
  */
